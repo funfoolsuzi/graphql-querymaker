@@ -4,25 +4,16 @@ import (
 	"reflect"
 )
 
-func MakeQuery(source interface{}) (string, error) {
+// MakeQuery generates GraphQL query string and add it to
+func MakeQuery(query interface{}) (string, []string) {
 
-	t := getTypeOrElementTypeOf(source)
+	t := getTypeOrElementType(reflect.TypeOf(query))
 
 	op := newQuery(t.Name())
 
 	op.addSubfieldsFromStruct(nil, t)
 
-	return op.String(), nil
-}
-
-func getTypeOrElementTypeOf(source interface{}) reflect.Type {
-	t := reflect.TypeOf(source)
-
-	if t.Kind() == reflect.Ptr {
-		t = t.Elem()
-	}
-
-	return t
+	return op.generateTmplNVars()
 }
 
 func getTypeOrElementType(t reflect.Type) reflect.Type {

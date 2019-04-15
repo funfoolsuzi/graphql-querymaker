@@ -11,13 +11,13 @@ const (
 )
 
 type query struct {
-	name      string
-	subfields []*gqlField
-	variables map[string]string
+	name         string
+	subGqlFields []*gqlField
+	variables    map[string]string
 }
 
 type gqlField struct {
-	key          string
+	name         string
 	subGqlFields []*gqlField
 	variableName string
 }
@@ -29,6 +29,7 @@ func newQuery(name string) *query {
 	}
 }
 
+// addSubfieldsFromStruct adds struct-subfield to query-subfield recursively
 func (q *query) addSubfieldsFromStruct(f *gqlField, typeStruct reflect.Type) {
 	subs := make([]*gqlField, 0, typeStruct.NumField())
 
@@ -41,7 +42,7 @@ func (q *query) addSubfieldsFromStruct(f *gqlField, typeStruct reflect.Type) {
 		}
 
 		sub := &gqlField{
-			key: fieldName,
+			name: fieldName,
 		}
 		q.variableScan(sf, sub)
 		t := getTypeOrElementType(sf.Type)
@@ -51,7 +52,7 @@ func (q *query) addSubfieldsFromStruct(f *gqlField, typeStruct reflect.Type) {
 		subs = append(subs, sub)
 	}
 	if f == nil { // means it's the root/operation
-		q.subfields = subs
+		q.subGqlFields = subs
 		return
 	}
 

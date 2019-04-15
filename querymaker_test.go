@@ -1,7 +1,9 @@
 package querymaker_test
 
 import (
+	"crypto/sha1"
 	"fmt"
+	"io"
 	"testing"
 
 	qm "github.com/nbcnews/graphql-querymaker"
@@ -27,4 +29,11 @@ func TestMakeQuery(t *testing.T) {
 	tmpl, _ := qm.MakeQuery(d)
 
 	fmt.Println(tmpl)
+
+	h := sha1.New()
+	io.WriteString(h, tmpl)
+	sha1Hash := fmt.Sprintf("%x", h.Sum(nil))
+	if sha1Hash != "b4f2ba89cfed17295f5f613680677344c4e02ad2" { // original text for this hash can be found in `test_hash` directory
+		t.Fail()
+	}
 }

@@ -1,0 +1,12 @@
+query dummyQuery (
+  $hhh: abc
+  $iii: qwe
+) {
+  dummy(Height: $hhh) {
+    name
+    Height
+    Child(Location: $iii) {
+      Location
+    }
+  }
+}
