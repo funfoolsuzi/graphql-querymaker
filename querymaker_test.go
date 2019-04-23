@@ -6,7 +6,7 @@ import (
 	"io"
 	"testing"
 
-	qm "github.com/nbcnews/graphql-querymaker"
+	qm "github.com/funfoolsuzi/graphql-querymaker"
 )
 
 type dummyQuery struct {
